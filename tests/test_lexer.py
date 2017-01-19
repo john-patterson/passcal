@@ -1,5 +1,6 @@
 import unittest
 
+from tests.shared import make_tokens
 from pascal.Lexer import Lexer
 from pascal.Token import Token, \
     ADD, SUB, MUL, DIV, EOF, INT, LPAREN, RPAREN
@@ -13,25 +14,7 @@ class TestLexer(unittest.TestCase):
 
     def verify_arithmetic(self, expr, *args):
         result = TestLexer.tokenize(expr)
-
-        def make_token(a):
-            if isinstance(a, int):
-                return Token(INT, str(a), a)
-            elif a == '+':
-                return Token(ADD, '+')
-            elif a == '-':
-                return Token(SUB, '-')
-            elif a == '*':
-                return Token(MUL, '*')
-            elif a == '/':
-                return Token(DIV, '/')
-            elif a == '(':
-                return Token(LPAREN, '(')
-            elif a == ')':
-                return Token(RPAREN, ')')
-
-        expected = [make_token(a) for a in args]
-        expected.append(Token(EOF))
+        expected = make_tokens(*args)
         self.assertSequenceEqual(expected, result)
 
     def test_simple(self):

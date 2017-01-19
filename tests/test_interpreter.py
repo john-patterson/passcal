@@ -1,32 +1,18 @@
 import unittest
 
 from pascal.Interpreter import Interpreter
-from pascal.Token import Token, \
-    INT, ADD, SUB, MUL, DIV, LPAREN, RPAREN, EOF
+from pascal.Parser import Parser
+from tests.shared import make_tokens
 
 
 class TestInterpreter(unittest.TestCase):
     def verify_arithmetic(self, evaluates_to, *args):
-        def make_token(a):
-            if isinstance(a, int):
-                return Token(INT, str(a), a)
-            elif a == '+':
-                return Token(ADD, '+')
-            elif a == '-':
-                return Token(SUB, '-')
-            elif a == '*':
-                return Token(MUL, '*')
-            elif a == '/':
-                return Token(DIV, '/')
-            elif a == '(':
-                return Token(LPAREN, '(')
-            elif a == ')':
-                return Token(RPAREN, ')')
+        token_stream = make_tokens(*args)
 
-        token_stream = [make_token(a) for a in args]
-        token_stream.append(Token(EOF))
-
-        result = Interpreter(token_stream).expr()
+        # TODO: Remove dependency on parser
+        #   Need a way to build parse trees in test methods.
+        ast = Parser(token_stream).parse()
+        result = Interpreter(ast).run()
         self.assertEqual(evaluates_to, result)
 
     def test_simple(self):
