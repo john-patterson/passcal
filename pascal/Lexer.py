@@ -1,4 +1,7 @@
 ADD = 'ADD'
+SUB = 'SUB'
+MUL = 'MUL'
+DIV = 'DIV'
 EOF = 'EOF'
 INT = 'INT'
 
@@ -72,6 +75,12 @@ class Lexer:
         c = self._advance()
         if c == '+':
             self._add_token(ADD)
+        elif c == '-':
+            self._add_token(SUB)
+        elif c == '*':
+            self._add_token(MUL)
+        elif c == '/':
+            self._add_token(DIV)
         else:
             if c.isdigit():
                 self._number()

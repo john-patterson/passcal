@@ -1,6 +1,7 @@
 import unittest
 from .context import pascal
-from pascal.Lexer import Lexer, Token, INT, ADD, EOF
+from pascal.Lexer import Lexer, Token, \
+    INT, ADD, SUB, MUL, DIV, EOF
 
 
 class LexerTest(unittest.TestCase):
@@ -9,32 +10,34 @@ class LexerTest(unittest.TestCase):
         lexer = Lexer(code)
         return lexer.get_tokens()
 
-    def test_simpleaddition(self):
-        result = LexerTest.tokenize('1+2')
-        expected = [
-            Token(INT, '1', 1),
-            Token(ADD, '+'),
-            Token(INT, '2', 2),
-            Token(EOF)
-        ]
+    def verify_arithmetic(self, expr, *args):
+        result = LexerTest.tokenize(expr)
+
+        def make_token(a):
+            if isinstance(a, int):
+                return Token(INT, str(a), a)
+            elif a == '+':
+                return Token(ADD, '+')
+            elif a == '-':
+                return Token(SUB, '-')
+            elif a == '*':
+                return Token(MUL, '*')
+            elif a == '/':
+                return Token(DIV, '/')
+
+        expected = [make_token(a) for a in args]
+        expected.append(Token(EOF))
         self.assertSequenceEqual(expected, result)
 
-    def test_addition_multidigit(self):
-        result = LexerTest.tokenize('11+29')
-        expected = [
-            Token(INT, '11', 11),
-            Token(ADD, '+'),
-            Token(INT, '29', 29),
-            Token(EOF)
-        ]
-        self.assertSequenceEqual(expected, result)
+    def test_simple(self):
+        for op in ['+', '-', '*', '/']:
+            self.verify_arithmetic('1{}2'.format(op), 1, op, 2)
 
-    def test_addition_whitespace_invariant(self):
-        result = LexerTest.tokenize('11 \t +  29')
-        expected = [
-            Token(INT, '11', 11),
-            Token(ADD, '+'),
-            Token(INT, '29', 29),
-            Token(EOF)
-        ]
-        self.assertSequenceEqual(expected, result)
+    def test_multidigit(self):
+        for op in ['+', '-', '*', '/']:
+            self.verify_arithmetic('11{}29'.format(op), 11, op, 29)
+
+    def test_whitespace_invariant(self):
+        for op in ['+', '-', '*', '/']:
+            self.verify_arithmetic('11 \t {}   29'.format(op), 11, op, 29)
+
