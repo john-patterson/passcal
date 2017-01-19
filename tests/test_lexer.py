@@ -5,14 +5,14 @@ from pascal.Token import Token, \
     ADD, SUB, MUL, DIV, EOF, INT, LPAREN, RPAREN
 
 
-class LexerTest(unittest.TestCase):
+class TestLexer(unittest.TestCase):
     @staticmethod
     def tokenize(code):
         lexer = Lexer(code)
         return lexer.get_tokens()
 
     def verify_arithmetic(self, expr, *args):
-        result = LexerTest.tokenize(expr)
+        result = TestLexer.tokenize(expr)
 
         def make_token(a):
             if isinstance(a, int):
