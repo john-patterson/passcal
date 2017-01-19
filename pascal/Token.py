@@ -19,10 +19,10 @@ class Token:
         return self.__str__()
 
 
-ADD = 'ADD'
-SUB = 'SUB'
-MUL = 'MUL'
-DIV = 'DIV'
+PLUS = 'ADD'
+MINUS = 'SUB'
+STAR = 'MUL'
+SLASH = 'DIV'
 EOF = 'EOF'
 INT = 'INT'
 LPAREN = 'LPAREN'

@@ -1,7 +1,7 @@
 from pascal.Parser import Parser
 from pascal.Lexer import Lexer
 from pascal.Token import Token, \
-    INT, ADD, SUB, MUL, DIV, LPAREN, RPAREN, EOF
+    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF
 
 
 class NodeVisitor:
@@ -15,8 +15,41 @@ class NodeVisitor:
             type(node).__name__
         ))
 
+
 class InterpreterError(Exception):
     pass
+
+
+class ReversePolishTranslator(NodeVisitor):
+    def __init__(self, ast):
+        self.ast = ast
+
+    def visit_BinaryOperation(self, node):
+        op = node.op.text
+        return '{} {} {}'.format(
+            self.visit(node.left),
+            self.visit(node.right),
+            op
+        )
+
+    def visit_Number(self, node):
+        return node.value
+
+
+class LispTranslator(NodeVisitor):
+    def __init__(self, ast):
+        self.ast = ast
+
+    def visit_BinaryOperation(self, node):
+        op = node.op.text
+        return '({} {} {})'.format(
+            op,
+            self.visit(node.left),
+            self.visit(node.right),
+        )
+
+    def visit_Number(self, node):
+        return node.value
 
 
 class Interpreter(NodeVisitor):
@@ -25,13 +58,13 @@ class Interpreter(NodeVisitor):
 
     def visit_BinaryOperation(self, node):
         t = node.op.type
-        if t == ADD:
+        if t == PLUS:
             return self.visit(node.left) + self.visit(node.right)
-        elif t == SUB:
+        elif t == MINUS:
             return self.visit(node.left) - self.visit(node.right)
-        elif t == MUL:
+        elif t == STAR:
             return self.visit(node.left) * self.visit(node.right)
-        elif t == DIV:
+        elif t == SLASH:
             return self.visit(node.left) / self.visit(node.right)
 
     def visit_Number(self, node):
@@ -39,3 +72,11 @@ class Interpreter(NodeVisitor):
 
     def run(self):
         return self.visit(self.ast)
+
+
+if __name__ == '__main__':
+    lexer = Lexer('(5 + 3) * 12 / 3')
+    tokens = lexer.get_tokens()
+    ast = Parser(tokens).parse()
+    print(ReversePolishTranslator(ast).visit(ast))
+    print(LispTranslator(ast).visit(ast))

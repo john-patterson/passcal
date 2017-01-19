@@ -1,6 +1,6 @@
 from pascal.AST import BinaryOperation, Number
 from pascal.Token import Token,\
-    ADD, SUB, MUL, DIV, INT, LPAREN, RPAREN, EOF
+    PLUS, MINUS, STAR, SLASH, INT, LPAREN, RPAREN, EOF
 
 
 class ParserError(Exception):
@@ -52,12 +52,12 @@ class Parser:
     def term(self):
         node = self.factor()
 
-        while self.current_token.type in (MUL, DIV):
+        while self.current_token.type in (STAR, SLASH):
             token = self.current_token
-            if token.type == MUL:
-                self._eat(MUL)
-            elif token.type == DIV:
-                self._eat(DIV)
+            if token.type == STAR:
+                self._eat(STAR)
+            elif token.type == SLASH:
+                self._eat(SLASH)
 
             node = BinaryOperation(
                 left=node,
@@ -70,12 +70,12 @@ class Parser:
     def expr(self):
         node = self.term()
 
-        while self.current_token.type in (ADD, SUB):
+        while self.current_token.type in (PLUS, MINUS):
             token = self.current_token
-            if token.type == ADD:
-                self._eat(ADD)
-            elif token.type == SUB:
-                self._eat(SUB)
+            if token.type == PLUS:
+                self._eat(PLUS)
+            elif token.type == MINUS:
+                self._eat(MINUS)
 
             node = BinaryOperation(
                 left=node,

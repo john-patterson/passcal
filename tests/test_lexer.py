@@ -3,7 +3,7 @@ import unittest
 from tests.shared import make_tokens
 from pascal.Lexer import Lexer
 from pascal.Token import Token, \
-    ADD, SUB, MUL, DIV, EOF, INT, LPAREN, RPAREN
+    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN
 
 
 class TestLexer(unittest.TestCase):

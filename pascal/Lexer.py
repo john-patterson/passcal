@@ -1,5 +1,5 @@
 from pascal.Token import Token, \
-    ADD, SUB, MUL, DIV, EOF, INT, LPAREN, RPAREN
+    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN
 
 
 class LexerError(Exception):
@@ -49,13 +49,13 @@ class Lexer:
     def _scan_token(self):
         c = self._advance()
         if c == '+':
-            self._add_token(ADD)
+            self._add_token(PLUS)
         elif c == '-':
-            self._add_token(SUB)
+            self._add_token(MINUS)
         elif c == '*':
-            self._add_token(MUL)
+            self._add_token(STAR)
         elif c == '/':
-            self._add_token(DIV)
+            self._add_token(SLASH)
         elif c == '(':
             self._add_token(LPAREN)
         elif c == ')':
