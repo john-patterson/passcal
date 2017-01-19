@@ -1,7 +1,7 @@
 import unittest
 
 from pascal.Lexer import Lexer, Token, \
-    INT, ADD, SUB, MUL, DIV, EOF
+    INT, ADD, SUB, MUL, DIV, EOF, LPAREN, RPAREN
 
 
 class LexerTest(unittest.TestCase):
@@ -24,6 +24,10 @@ class LexerTest(unittest.TestCase):
                 return Token(MUL, '*')
             elif a == '/':
                 return Token(DIV, '/')
+            elif a == '(':
+                return Token(LPAREN, '(')
+            elif a == ')':
+                return Token(RPAREN, ')')
 
         expected = [make_token(a) for a in args]
         expected.append(Token(EOF))
@@ -43,3 +47,6 @@ class LexerTest(unittest.TestCase):
 
     def test_mixed_symbols(self):
         self.verify_arithmetic('1 + 2 * 3 / 4', 1, '+', 2, '*', 3, '/', 4)
+
+    def test_parens(self):
+        self.verify_arithmetic('1 + (2 * 3)', 1, '+', '(', 2, '*', 3, ')')

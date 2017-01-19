@@ -4,6 +4,8 @@ MUL = 'MUL'
 DIV = 'DIV'
 EOF = 'EOF'
 INT = 'INT'
+LPAREN = 'LPAREN'
+RPAREN = 'RPAREN'
 
 
 class Token:
@@ -81,6 +83,10 @@ class Lexer:
             self._add_token(MUL)
         elif c == '/':
             self._add_token(DIV)
+        elif c == '(':
+            self._add_token(LPAREN)
+        elif c == ')':
+            self._add_token(RPAREN)
         else:
             if c.isdigit():
                 self._number()
