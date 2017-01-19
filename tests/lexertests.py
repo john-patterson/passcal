@@ -1,7 +1,8 @@
 import unittest
 
-from pascal.Lexer import Lexer, Token, \
-    INT, ADD, SUB, MUL, DIV, EOF, LPAREN, RPAREN
+from pascal.Lexer import Lexer
+from pascal.Token import Token, \
+    ADD, SUB, MUL, DIV, EOF, INT, LPAREN, RPAREN
 
 
 class LexerTest(unittest.TestCase):

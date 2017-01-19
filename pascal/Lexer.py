@@ -1,32 +1,5 @@
-ADD = 'ADD'
-SUB = 'SUB'
-MUL = 'MUL'
-DIV = 'DIV'
-EOF = 'EOF'
-INT = 'INT'
-LPAREN = 'LPAREN'
-RPAREN = 'RPAREN'
-
-
-class Token:
-    def __init__(self, type, text='', literal=None):
-        self.type = type
-        self.text = text
-        self.literal = literal
-
-    def __eq__(self, other):
-        return self.type == other.type \
-               and self.text == other.text \
-               and self.literal == other.literal
-
-    def __str__(self):
-        return '<Token ({type}, {text})>'.format(
-            type=self.type,
-            text=self.text
-        )
-
-    def __repr__(self):
-        return self.__str__()
+from pascal.Token import Token, \
+    ADD, SUB, MUL, DIV, EOF, INT, LPAREN, RPAREN
 
 
 class LexerError(Exception):
@@ -106,10 +79,3 @@ class Lexer:
         return self.tokens
 
 
-class Interpreter:
-    pass
-
-
-if __name__ == '__main__':
-    lexer = Lexer('1+2')
-    print(lexer.get_tokens())
