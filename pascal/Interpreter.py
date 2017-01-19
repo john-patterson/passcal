@@ -32,6 +32,13 @@ class ReversePolishTranslator(NodeVisitor):
             op
         )
 
+    def visit_UnaryOp(self, node):
+        op = node.op.type
+        if op == PLUS:
+            return +self.visit(node.expr)
+        elif op == MINUS:
+            return -self.visit(node.expr)
+
     def visit_Number(self, node):
         return node.value
 
@@ -47,6 +54,13 @@ class LispTranslator(NodeVisitor):
             self.visit(node.left),
             self.visit(node.right),
         )
+
+    def visit_UnaryOp(self, node):
+        op = node.op.type
+        if op == PLUS:
+            return +self.visit(node.expr)
+        elif op == MINUS:
+            return -self.visit(node.expr)
 
     def visit_Number(self, node):
         return node.value
@@ -67,6 +81,13 @@ class Interpreter(NodeVisitor):
         elif t == SLASH:
             return self.visit(node.left) / self.visit(node.right)
 
+    def visit_UnaryOp(self, node):
+        op = node.op.type
+        if op == PLUS:
+            return +self.visit(node.expr)
+        elif op == MINUS:
+            return -self.visit(node.expr)
+
     def visit_Number(self, node):
         return node.value
 
@@ -75,8 +96,9 @@ class Interpreter(NodeVisitor):
 
 
 if __name__ == '__main__':
-    lexer = Lexer('(5 + 3) * 12 / 3')
+    lexer = Lexer('5---2')
     tokens = lexer.get_tokens()
     ast = Parser(tokens).parse()
+    print(Interpreter(ast).run())
     print(ReversePolishTranslator(ast).visit(ast))
     print(LispTranslator(ast).visit(ast))

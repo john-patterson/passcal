@@ -19,6 +19,12 @@ class BinaryOperation(AST):
         return self.__str__()
 
 
+class UnaryOp(AST):
+    def __init__(self, op, expr):
+        self.token = self.op = op
+        self.expr = expr
+
+
 class Number(AST):
     def __init__(self, token):
         self.token = token

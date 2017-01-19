@@ -1,4 +1,4 @@
-from pascal.AST import BinaryOperation, Number
+from pascal.AST import BinaryOperation, UnaryOp, Number
 from pascal.Token import Token,\
     PLUS, MINUS, STAR, SLASH, INT, LPAREN, RPAREN, EOF
 
@@ -39,6 +39,14 @@ class Parser:
 
     def factor(self):
         token = self.current_token
+        if token.type == PLUS:
+            self._eat(PLUS)
+            node = UnaryOp(token, self.factor())
+            return node
+        elif token.type == MINUS:
+            self._eat(MINUS)
+            node = UnaryOp(token, self.factor())
+            return node
         if token.type == INT:
             self._eat(INT)
             return Number(token)
