@@ -1,5 +1,5 @@
 import unittest
-from .context import pascal
+
 from pascal.Lexer import Lexer, Token, \
     INT, ADD, SUB, MUL, DIV, EOF
 
@@ -41,3 +41,5 @@ class LexerTest(unittest.TestCase):
         for op in ['+', '-', '*', '/']:
             self.verify_arithmetic('11 \t {}   29'.format(op), 11, op, 29)
 
+    def test_mixed_symbols(self):
+        self.verify_arithmetic('1 + 2 * 3 / 4', 1, '+', 2, '*', 3, '/', 4)
