@@ -1,5 +1,6 @@
 from pascal.Token import Token, \
-    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF, ID
+    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF, ID, \
+    ASSIGN, SEMI, DOT
 
 
 def make_tokens(*args):
@@ -18,6 +19,12 @@ def make_tokens(*args):
             return Token(LPAREN, '(')
         elif a == ')':
             return Token(RPAREN, ')')
+        elif a == ':=':
+            return Token(ASSIGN, ':=')
+        elif a == '.':
+            return Token(DOT, '.')
+        elif a == ';':
+            return Token(SEMI, ';')
         else:
             return Token(ID, a)
 

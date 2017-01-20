@@ -38,3 +38,9 @@ class TestLexer(unittest.TestCase):
     def test_identifier(self):
         self.verify('test', 'test')
         self.verify('1+test', 1, '+', 'test')
+
+    def test_assign_semi_dot(self):
+        self.verify(':=', ':=')
+        self.verify('test := 1 + 1', 'test', ':=', 1, '+', 1)
+        self.verify('.:=test;', '.', ':=', 'test', ';')
+

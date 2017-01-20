@@ -1,5 +1,6 @@
 from pascal.Token import Token, \
-    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN, ID
+    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN, ID, \
+    ASSIGN, SEMI, DOT
 
 
 RESERVED_KEYWORDS = {
@@ -73,6 +74,13 @@ class Lexer:
             self._add_token(LPAREN)
         elif c == ')':
             self._add_token(RPAREN)
+        elif c == ':' and self._peek() == '=':
+            self._advance()
+            self._add_token(ASSIGN)
+        elif c == ';':
+            self._add_token(SEMI)
+        elif c == '.':
+            self._add_token(DOT)
         else:
             if c.isdigit():
                 self._number()
