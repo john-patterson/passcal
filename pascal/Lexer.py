@@ -1,11 +1,11 @@
 from pascal.Token import Token, \
     PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN, ID, \
-    ASSIGN, SEMI, DOT
+    ASSIGN, SEMI, DOT, BEGIN, END
 
 
 RESERVED_KEYWORDS = {
-    'BEGIN': Token('BEGIN', 'BEGIN'),
-    'END': Token('END', 'END'),
+    BEGIN: Token(BEGIN, BEGIN),
+    END: Token(END, END),
 }
 
 
@@ -94,10 +94,11 @@ class Lexer:
     def get_tokens(self):
         if len(self.tokens) > 0:
             return self.tokens
+        self._whitespace()
         while not self._eof():
-            self._whitespace()
             self.start = self.current
             self._scan_token()
+            self._whitespace()
         self.tokens.append(Token(EOF))
         return self.tokens
 
