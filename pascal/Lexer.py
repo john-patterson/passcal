@@ -1,5 +1,11 @@
 from pascal.Token import Token, \
-    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN
+    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN, ID
+
+
+RESERVED_KEYWORDS = {
+    'BEGIN': Token('BEGIN', 'BEGIN'),
+    'END': Token('END', 'END'),
+}
 
 
 class LexerError(Exception):
@@ -36,6 +42,13 @@ class Lexer:
         text = self._current_lexeme()
         self.tokens.append(Token(type, text, payload))
 
+    def _id(self):
+        while self._peek().isalnum():
+            self._advance()
+        text = self._current_lexeme()
+        token = RESERVED_KEYWORDS.get(text, Token(ID, text))
+        self.tokens.append(token)
+
     def _number(self):
         while self._peek().isdigit():
             self._advance()
@@ -63,6 +76,8 @@ class Lexer:
         else:
             if c.isdigit():
                 self._number()
+            elif c.isalnum():
+                self._id()
             else:
                 Lexer._error('Could not classify {}.'.format(
                     self._current_lexeme()

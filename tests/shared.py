@@ -1,5 +1,5 @@
 from pascal.Token import Token, \
-    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF
+    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF, ID
 
 
 def make_tokens(*args):
@@ -18,6 +18,8 @@ def make_tokens(*args):
             return Token(LPAREN, '(')
         elif a == ')':
             return Token(RPAREN, ')')
+        else:
+            return Token(ID, a)
 
     token_stream = [make_token(a) for a in args]
     token_stream.append(Token(EOF))
