@@ -1,7 +1,7 @@
 from pascal.Parser import Parser
 from pascal.Lexer import Lexer
 from pascal.Token import Token, \
-    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF
+    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF, DIV
 
 GLOBAL_SCOPE = {}
 
@@ -79,6 +79,8 @@ class Interpreter(NodeVisitor):
             return self.visit(node.left) - self.visit(node.right)
         elif t == STAR:
             return self.visit(node.left) * self.visit(node.right)
+        elif t == DIV:
+            return self.visit(node.left) // self.visit(node.right)
         elif t == SLASH:
             return self.visit(node.left) / self.visit(node.right)
 
@@ -121,7 +123,7 @@ if __name__ == '__main__':
         BEGIN
             number := 2;
             a := number;
-            b := 10 * a + 10 * number / 4;
+            b := 10 * a + 10 * number DIV 4;
             c := a - - b
         END;
         x := 11;

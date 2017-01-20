@@ -1,12 +1,12 @@
 from pascal.Token import Token, \
     PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN, ID, \
-    ASSIGN, SEMI, DOT, BEGIN, END
+    ASSIGN, SEMI, DOT, BEGIN, END, DIV
 
 
 RESERVED_KEYWORDS = {
     BEGIN: Token(BEGIN, BEGIN),
     END: Token(END, END),
-
+    DIV: Token(DIV, DIV),
 }
 
 

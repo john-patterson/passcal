@@ -2,7 +2,8 @@ from pascal.AST import BinaryOperation, UnaryOp, Number, \
     Variable, Compound, NoOp, Assign
 from pascal.Token import Token, \
     PLUS, MINUS, STAR, SLASH, INT, LPAREN, RPAREN, EOF, \
-    ID, ASSIGN, SEMI, DOT, BEGIN, END
+    ID, ASSIGN, SEMI, DOT, BEGIN, END, DIV
+from pascal.Lexer import RESERVED_KEYWORDS
 
 
 class ParserError(Exception):
@@ -132,12 +133,14 @@ class Parser:
     def term(self):
         node = self.factor()
 
-        while self.current_token.type in (STAR, SLASH):
+        while self.current_token.type in (STAR, SLASH, DIV):
             token = self.current_token
             if token.type == STAR:
                 self._eat(STAR)
             elif token.type == SLASH:
                 self._eat(SLASH)
+            elif token == RESERVED_KEYWORDS[DIV]:
+                self._eat(DIV)
 
             node = BinaryOperation(
                 left=node,
