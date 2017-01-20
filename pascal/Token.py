@@ -5,7 +5,8 @@ class Token:
         self.literal = literal
 
     def __eq__(self, other):
-        return self.type == other.type \
+        return isinstance(other, Token) \
+               and self.type == other.type \
                and self.text == other.text \
                and self.literal == other.literal
 
@@ -19,10 +20,10 @@ class Token:
         return self.__str__()
 
 
-PLUS = 'ADD'
-MINUS = 'SUB'
-STAR = 'MUL'
-SLASH = 'DIV'
+PLUS = 'PLUS'
+MINUS = 'MINUS'
+STAR = 'STAR'
+SLASH = 'SLASH'
 EOF = 'EOF'
 INT = 'INT'
 LPAREN = 'LPAREN'
