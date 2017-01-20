@@ -36,16 +36,19 @@ class TestLexer(unittest.TestCase):
         self.verify('1 + (2 * 3)', 1, '+', '(', 2, '*', 3, ')')
 
     def test_identifier(self):
-        self.verify('test', 'test')
-        self.verify('1+test', 1, '+', 'test')
+        self.verify('test', 'TEST')
+        self.verify('1+test', 1, '+', 'TEST')
 
     def test_assign_semi_dot(self):
         self.verify(':=', ':=')
-        self.verify('test := 1 + 1', 'test', ':=', 1, '+', 1)
-        self.verify('.:=test;', '.', ':=', 'test', ';')
+        self.verify('test := 1 + 1', 'TEST', ':=', 1, '+', 1)
+        self.verify('.:=test;', '.', ':=', 'TEST', ';')
 
     def test_case_insensitive(self):
         self.verify('beGin number := 2 ; a := NUMbEr; EnD;',
                     'BEGIN', 'NUMBER', ':=', 2, ';', 'A',
                     ':=', 'NUMBER', ';', 'END', ';')
+
+    def test_integer_division(self):
+        self.verify('div/', 'DIV', '/')
 
