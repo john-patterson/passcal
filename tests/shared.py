@@ -1,6 +1,7 @@
 from pascal.Token import Token, \
     INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF, ID, \
     ASSIGN, SEMI, DOT
+from pascal.Lexer import RESERVED_KEYWORDS
 
 
 def make_tokens(*args):
@@ -25,6 +26,8 @@ def make_tokens(*args):
             return Token(DOT, '.')
         elif a == ';':
             return Token(SEMI, ';')
+        elif a.upper() in RESERVED_KEYWORDS.keys():
+            return RESERVED_KEYWORDS[a.upper()]
         else:
             return Token(ID, a)
 

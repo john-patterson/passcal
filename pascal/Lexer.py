@@ -6,6 +6,7 @@ from pascal.Token import Token, \
 RESERVED_KEYWORDS = {
     BEGIN: Token(BEGIN, BEGIN),
     END: Token(END, END),
+
 }
 
 
@@ -46,7 +47,7 @@ class Lexer:
     def _id(self):
         while self._peek().isalnum():
             self._advance()
-        text = self._current_lexeme()
+        text = self._current_lexeme().upper()
         token = RESERVED_KEYWORDS.get(text, Token(ID, text))
         self.tokens.append(token)
 

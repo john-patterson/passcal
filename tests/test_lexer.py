@@ -44,3 +44,8 @@ class TestLexer(unittest.TestCase):
         self.verify('test := 1 + 1', 'test', ':=', 1, '+', 1)
         self.verify('.:=test;', '.', ':=', 'test', ';')
 
+    def test_case_insensitive(self):
+        self.verify('beGin number := 2 ; a := NUMbEr; EnD;',
+                    'BEGIN', 'NUMBER', ':=', 2, ';', 'A',
+                    ':=', 'NUMBER', ';', 'END', ';')
+
