@@ -11,7 +11,7 @@ class TestInterpreter(unittest.TestCase):
 
         # TODO: Remove dependency on parser
         #   Need a way to build parse trees in test methods.
-        ast = Parser(token_stream).parse()
+        ast = Parser(token_stream).expr()
         result = Interpreter(ast).run()
         self.assertEqual(evaluates_to, result)
 
