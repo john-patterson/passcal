@@ -1,12 +1,14 @@
-from pascal.Token import Token, \
-    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN, ID, \
-    ASSIGN, SEMI, DOT, BEGIN, END, DIV
+from pascal.Token import *
 
 
 RESERVED_KEYWORDS = {
     BEGIN: Token(BEGIN, BEGIN),
     END: Token(END, END),
-    DIV: Token(DIV, DIV),
+    DIV: Token(INTEGER_DIV, DIV),
+    PROGRAM: Token(PROGRAM, PROGRAM),
+    VAR: Token(VAR, VAR),
+    INTEGER: Token(INTEGER, INTEGER),
+    REAL: Token(REAL, REAL)
 }
 
 
@@ -55,11 +57,16 @@ class Lexer:
         while self._peek().isdigit():
             self._advance()
         text = self._current_lexeme()
-        self._add_token(INT, int(text))
+        self._add_token(INTEGER_CONST, int(text))
 
     def _whitespace(self):
         while self._peek().isspace():
             self._advance()
+
+    def _comment(self):
+        while self._peek() != '}':
+            self._advance()
+        self._advance()
 
     def _scan_token(self):
         c = self._advance()
@@ -70,7 +77,7 @@ class Lexer:
         elif c == '*':
             self._add_token(STAR)
         elif c == '/':
-            self._add_token(SLASH)
+            self._add_token(FLOAT_DIV)
         elif c == '(':
             self._add_token(LPAREN)
         elif c == ')':

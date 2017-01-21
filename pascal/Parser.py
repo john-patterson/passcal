@@ -1,8 +1,6 @@
 from pascal.AST import BinaryOperation, UnaryOp, Number, \
     Variable, Compound, NoOp, Assign
-from pascal.Token import Token, \
-    PLUS, MINUS, STAR, SLASH, INT, LPAREN, RPAREN, EOF, \
-    ID, ASSIGN, SEMI, DOT, BEGIN, END, DIV
+from pascal.Token import *
 from pascal.Lexer import RESERVED_KEYWORDS
 
 
@@ -117,8 +115,8 @@ class Parser:
             self._eat(MINUS)
             node = UnaryOp(token, self.factor())
             return node
-        if token.type == INT:
-            self._eat(INT)
+        if token.type == INTEGER_CONST:
+            self._eat(INTEGER_CONST)
             return Number(token)
         elif token.type == LPAREN:
             self._eat(LPAREN)
@@ -133,14 +131,14 @@ class Parser:
     def term(self):
         node = self.factor()
 
-        while self.current_token.type in (STAR, SLASH, DIV):
+        while self.current_token.type in (STAR, FLOAT_DIV, INTEGER_DIV):
             token = self.current_token
             if token.type == STAR:
                 self._eat(STAR)
-            elif token.type == SLASH:
-                self._eat(SLASH)
+            elif token.type == FLOAT_DIV:
+                self._eat(FLOAT_DIV)
             elif token == RESERVED_KEYWORDS[DIV]:
-                self._eat(DIV)
+                self._eat(INTEGER_DIV)
 
             node = BinaryOperation(
                 left=node,

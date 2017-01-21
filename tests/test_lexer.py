@@ -1,9 +1,7 @@
 import unittest
 
-from tests.shared import make_tokens
 from pascal.Lexer import Lexer, LexerError
-from pascal.Token import Token, \
-    PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN
+from tests.shared import make_tokens
 
 
 class TestLexer(unittest.TestCase):

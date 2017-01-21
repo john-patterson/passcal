@@ -1,7 +1,6 @@
 from pascal.Parser import Parser
 from pascal.Lexer import Lexer
-from pascal.Token import Token, \
-    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF, DIV
+from pascal.Token import *
 
 GLOBAL_SCOPE = {}
 
@@ -79,9 +78,9 @@ class Interpreter(NodeVisitor):
             return self.visit(node.left) - self.visit(node.right)
         elif t == STAR:
             return self.visit(node.left) * self.visit(node.right)
-        elif t == DIV:
+        elif t == INTEGER_DIV:
             return self.visit(node.left) // self.visit(node.right)
-        elif t == SLASH:
+        elif t == FLOAT_DIV:
             return self.visit(node.left) / self.visit(node.right)
 
     def visit_UnaryOp(self, node):

@@ -1,7 +1,6 @@
 from unittest import TestCase
 from pascal.AST import AST, BinaryOperation, UnaryOp, Number
-from pascal.Token import Token, \
-    PLUS, MINUS, STAR, SLASH, EOF, LPAREN, RPAREN, INT, DIV
+from pascal.Token import *
 from pascal.Parser import Parser
 from pascal.Lexer import RESERVED_KEYWORDS
 
@@ -11,7 +10,7 @@ tokens = {
     '*': Token(STAR, '*'),
     '(': Token(LPAREN, '('),
     ')': Token(RPAREN, ')'),
-    1: Token(INT, '1', 1),
+    1: Token(INTEGER_CONST, '1', 1),
     EOF: Token(EOF),
 }
 tokens.update(RESERVED_KEYWORDS)

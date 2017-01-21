@@ -1,13 +1,11 @@
-from pascal.Token import Token, \
-    INT, PLUS, MINUS, STAR, SLASH, LPAREN, RPAREN, EOF, ID, \
-    ASSIGN, SEMI, DOT
+from pascal.Token import *
 from pascal.Lexer import RESERVED_KEYWORDS
 
 
 def make_tokens(*args):
     def make_token(a):
         if isinstance(a, int):
-            return Token(INT, str(a), a)
+            return Token(INTEGER_CONST, str(a), a)
         elif a == '+':
             return Token(PLUS, '+')
         elif a == '-':
@@ -15,7 +13,7 @@ def make_tokens(*args):
         elif a == '*':
             return Token(STAR, '*')
         elif a == '/':
-            return Token(SLASH, '/')
+            return Token(FLOAT_DIV, '/')
         elif a == '(':
             return Token(LPAREN, '(')
         elif a == ')':
