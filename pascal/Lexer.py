@@ -99,8 +99,6 @@ class Lexer:
             self._add_token(ASSIGN)
         elif c == ':':
             self._add_token(COLON)
-        elif c.isdigit():
-            self._number()
         elif c == ';':
             self._add_token(SEMI)
         elif c == '.':
@@ -114,13 +112,14 @@ class Lexer:
                 self._id()
             except IndexError:
                 raise e
+        elif c.isalpha():
+            self._id()
+        elif c.isdigit():
+            self._number()
         else:
-            if c.isalnum():
-                self._id()
-            else:
-                Lexer._error('Could not classify {}.'.format(
-                    self._current_lexeme()
-                ))
+            Lexer._error('Could not classify {}.'.format(
+                self._current_lexeme()
+            ))
 
     def get_tokens(self):
         if len(self.tokens) > 0:
@@ -133,4 +132,7 @@ class Lexer:
         self.tokens.append(Token(EOF))
         return self.tokens
 
-
+if __name__ == '__main__':
+    sample = open('../sample/part10.pas', 'r').read()
+    lexer = Lexer(sample)
+    print(lexer.get_tokens())

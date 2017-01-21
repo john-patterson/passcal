@@ -112,23 +112,27 @@ class Interpreter(NodeVisitor):
         else:
             return val
 
+    def visit_Program(self, node):
+        self.visit(node.block)
+
+    def visit_Block(self, node):
+        for declaration in node.declarations:
+            self.visit(declaration)
+        self.visit(node.compound_statement)
+
+    def visit_VarDecl(self, node):
+        pass
+
+    def type_Type(self, node):
+        pass
+
     def run(self):
         return self.visit(self.ast)
 
 
 if __name__ == '__main__':
-    sample = '''
-    BEGIN
-        BEGIN
-            number := 2;
-            _a := number;
-            b := 10 * _a + 10 * number DIV 4;
-            c := _a - - b
-        END;
-        x := 11;
-    END.
-    '''
     from pascal.Lexer import Lexer
+    sample = ""
     tokens = Lexer(sample).get_tokens()
     ast = Parser(tokens).parse()
     Interpreter(ast).run()

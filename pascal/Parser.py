@@ -1,5 +1,4 @@
-from pascal.AST import BinaryOperation, UnaryOp, Number, \
-    Variable, Compound, NoOp, Assign
+from pascal.AST import *
 from pascal.Token import *
 from pascal.Lexer import RESERVED_KEYWORDS
 
@@ -52,9 +51,14 @@ class Parser:
         return node
 
     def program(self):
-        node = self.compound_statement()
+        self._eat(PROGRAM)
+        var_node = self.variable()
+        prog_name = var_node.value
+        self._eat(SEMI)
+        block_node = self.block()
+        program_node = Program(prog_name, block_node)
         self._eat(DOT)
-        return node
+        return program_node
 
     def compound_statement(self):
         self._eat(BEGIN)
@@ -102,6 +106,53 @@ class Parser:
         self._eat(ID)
         return node
 
+    def block(self):
+        declaration_nodes = self.declarations()
+        compound_statement_node = self.compound_statement()
+        node = Block(declaration_nodes, compound_statement_node)
+        return node
+
+    def declarations(self):
+        decl = []
+        if self.current_token.type == VAR:
+            self._eat(VAR)
+            while self.current_token.type == ID:
+                var_decl = self.variable_declaration()
+                decl.extend(var_decl)
+                self._eat(SEMI)
+        return decl
+
+    def variable_declaration(self):
+        var_nodes = [Variable(self.current_token)]
+        self._eat(ID)
+
+        while self.current_token.type == COMMA:
+            self._eat(COMMA)
+            var_nodes.append(Variable(self.current_token))
+            self._eat(ID)
+
+        self._eat(COLON)
+
+        type_node = self.type_spec()
+        var_declarations = [
+            VarDecl(var_node, type_node)
+            for var_node in var_nodes
+        ]
+
+        return var_declarations
+
+    def type_spec(self):
+        token = self.current_token
+        if self.current_token.type == INTEGER:
+            self._eat(INTEGER)
+        elif self.current_token.type == REAL:
+            self._eat(REAL)
+        else:
+            raise ParserError('{} not a type.'.format(token.type))
+        node = Type(token)
+        return node
+
+
     def empty(self):
         return NoOp()
 
@@ -115,8 +166,11 @@ class Parser:
             self._eat(MINUS)
             node = UnaryOp(token, self.factor())
             return node
-        if token.type == INTEGER_CONST:
+        elif token.type == INTEGER_CONST:
             self._eat(INTEGER_CONST)
+            return Number(token)
+        elif token.type == REAL_CONST:
+            self._eat(REAL_CONST)
             return Number(token)
         elif token.type == LPAREN:
             self._eat(LPAREN)
@@ -137,7 +191,7 @@ class Parser:
                 self._eat(STAR)
             elif token.type == FLOAT_DIV:
                 self._eat(FLOAT_DIV)
-            elif token == RESERVED_KEYWORDS[DIV]:
+            elif token.type == INTEGER_DIV:
                 self._eat(INTEGER_DIV)
 
             node = BinaryOperation(
