@@ -1,7 +1,8 @@
 import unittest
 
-from pascal.Interpreter import Interpreter
+from pascal.Interpreter import Interpreter, GLOBAL_SCOPE
 from pascal.Parser import Parser
+from pascal.Lexer import Lexer
 from tests.shared import make_tokens
 
 
@@ -14,6 +15,16 @@ class TestInterpreter(unittest.TestCase):
         ast = Parser(token_stream).expr()
         result = Interpreter(ast).run()
         self.assertEqual(evaluates_to, result)
+
+    def verify_program(self, code, g):
+        tokens = Lexer(code).get_tokens()
+        ast = Parser(tokens).program()
+        Interpreter(ast).run()
+        for k, v in g.items():
+            actual_v = GLOBAL_SCOPE.get(k.upper())
+            self.assertEqual(v, actual_v)
+
+
 
     def test_simple(self):
         self.verify_arithmetic(3, 1, '+', 2)
@@ -36,4 +47,21 @@ class TestInterpreter(unittest.TestCase):
         self.verify_arithmetic(22, 7, '+', 3, '*', '(', 10, '/', '(', 12, '/', '(', 3, '+', 1, ')', '-', 1, ')', ')')
         self.verify_arithmetic(10, 7, '+', 3, '*', '(', 10, '/', '(', 12, '/', '(', 3, '+', 1, ')', '-', 1, ')', ')', \
                                '/', '(', 2, '+', 3, ')', '-', 5, '-', 3, '+', '(', 8, ')')
+
+    def test_sample_compound(self):
+        code = '''
+            BEGIN
+                BEGIN
+                    number := 2;
+                    c := 10 * number;
+                END;
+                x := 11;
+            END.
+        '''
+        g = {
+            'number': 2,
+            'c': 20,
+            'x': 11,
+        }
+        self.verify_program(code, g)
 
