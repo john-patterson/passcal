@@ -83,10 +83,14 @@ class Lexer:
         elif c == '.':
             self._add_token(DOT)
         elif c == '_':
-            if self._eof() or not self._peek(1).isalnum():
-                raise LexerError('_ is not a valid identifier.')
-            self._advance()
-            self._id()
+            e = LexerError('_ is not a valid identifier')
+            try:
+                n = self._advance()
+                if not n.isalnum():
+                    raise e
+                self._id()
+            except IndexError:
+                raise e
         else:
             if c.isdigit():
                 self._number()
