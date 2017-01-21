@@ -82,6 +82,11 @@ class Lexer:
             self._add_token(SEMI)
         elif c == '.':
             self._add_token(DOT)
+        elif c == '_':
+            if self._eof() or not self._peek(1).isalnum():
+                raise LexerError('_ is not a valid identifier.')
+            self._advance()
+            self._id()
         else:
             if c.isdigit():
                 self._number()

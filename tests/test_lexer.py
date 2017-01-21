@@ -1,7 +1,7 @@
 import unittest
 
 from tests.shared import make_tokens
-from pascal.Lexer import Lexer
+from pascal.Lexer import Lexer, LexerError
 from pascal.Token import Token, \
     PLUS, MINUS, STAR, SLASH, EOF, INT, LPAREN, RPAREN
 
@@ -38,6 +38,9 @@ class TestLexer(unittest.TestCase):
     def test_identifier(self):
         self.verify('test', 'TEST')
         self.verify('1+test', 1, '+', 'TEST')
+        self.verify('_test', '_TEST')
+        self.assertRaises(LexerError, lambda : self.verify('_', ''))
+        self.assertRaises(LexerError, lambda : self.verify('_;', ''))
 
     def test_assign_semi_dot(self):
         self.verify(':=', ':=')
@@ -51,4 +54,3 @@ class TestLexer(unittest.TestCase):
 
     def test_integer_division(self):
         self.verify('div/', 'DIV', '/')
-
