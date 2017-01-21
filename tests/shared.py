@@ -24,6 +24,10 @@ def make_tokens(*args):
             return Token(DOT, '.')
         elif a == ';':
             return Token(SEMI, ';')
+        elif a == ',':
+            return Token(COMMA, ',')
+        elif a == ':':
+            return Token(COLON, ':')
         elif a.upper() in RESERVED_KEYWORDS.keys():
             return RESERVED_KEYWORDS[a.upper()]
         else:

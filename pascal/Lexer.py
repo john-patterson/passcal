@@ -56,8 +56,16 @@ class Lexer:
     def _number(self):
         while self._peek().isdigit():
             self._advance()
-        text = self._current_lexeme()
-        self._add_token(INTEGER_CONST, int(text))
+        if self._peek() == '.':
+            self._advance()
+            while self._peek().isdigit():
+                self._advance()
+            text = self._current_lexeme()
+            self._add_token(REAL_CONST, float(text))
+        else:
+            text = self._current_lexeme()
+            self._add_token(INTEGER_CONST, int(text))
+
 
     def _whitespace(self):
         while self._peek().isspace():
@@ -72,6 +80,10 @@ class Lexer:
         c = self._advance()
         if c == '+':
             self._add_token(PLUS)
+        elif c == '{':
+            self._comment()
+        elif c == ',':
+            self._add_token(COMMA)
         elif c == '-':
             self._add_token(MINUS)
         elif c == '*':
@@ -85,6 +97,10 @@ class Lexer:
         elif c == ':' and self._peek() == '=':
             self._advance()
             self._add_token(ASSIGN)
+        elif c == ':':
+            self._add_token(COLON)
+        elif c.isdigit():
+            self._number()
         elif c == ';':
             self._add_token(SEMI)
         elif c == '.':
@@ -99,9 +115,7 @@ class Lexer:
             except IndexError:
                 raise e
         else:
-            if c.isdigit():
-                self._number()
-            elif c.isalnum():
+            if c.isalnum():
                 self._id()
             else:
                 Lexer._error('Could not classify {}.'.format(

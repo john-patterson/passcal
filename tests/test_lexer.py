@@ -2,6 +2,7 @@ import unittest
 
 from pascal.Lexer import Lexer, LexerError
 from tests.shared import make_tokens
+from pascal.Token import *
 
 
 class TestLexer(unittest.TestCase):
@@ -52,3 +53,10 @@ class TestLexer(unittest.TestCase):
 
     def test_integer_division(self):
         self.verify('div/', 'DIV', '/')
+
+    def test_new_language(self):
+        self.verify('::=', ':', ':=')
+        self.verify(',./', ',', '.', '/')
+
+    def test_skip_comment(self):
+        self.verify('a{ test }:=1', 'A', ':=', 1)
